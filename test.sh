@@ -2,7 +2,7 @@
 
 declare -a arr=("version" "auth" "list" "post" "list" "clear" "list" "update" "list")
 
-bin=trmeet.py
+bin=trn.py
 flags="-v"
 
 for i in "${arr[@]}"

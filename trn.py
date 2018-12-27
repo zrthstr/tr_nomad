@@ -5,12 +5,12 @@ __author__ = 'zrth1k@gmail.com'
 
 import json
 import sys
-import geocoder
-import requests
 import argparse
 import logging
 import datetime
 import configparser
+import requests
+import geocoder
 
 
 def logger():
@@ -23,7 +23,7 @@ def logger():
 
 
 def parse_commandline():
-    actions=['version', 'auth', 'list', 'post', 'clear', 'update']
+    actions = ['version', 'auth', 'list', 'post', 'clear', 'update']
     parser = argparse.ArgumentParser()
     parser.add_argument('--verbose', '-v', action='count')
     parser.add_argument('action', default='list', choices=actions, help='....')
@@ -46,7 +46,7 @@ def parse_config():
     ini_file = 'trmeet.ini'
 
     base_url = 'https://www.trustroots.org'
-    
+
     post_sufix = '/api/offers'
     auth_sufix = '/api/auth/signin'
     list_sufix = '/api/offers-by/{}?types=meet'
@@ -57,7 +57,7 @@ def parse_config():
     c = config[section]
 
     headers = {'Content-Type':'application/json;charset=UTF-8',
-                'Accept':'application/json, text/plain, */*'}
+               'Accept':'application/json, text/plain, */*'}
 
     login_data = {'username':c['username'],
                   'password':c['password']}
@@ -86,7 +86,7 @@ def version():
               '        \  \/ /\n'
               '         |   /             This program may be freely redistributed under\n'
               '         | D|              the terms of the GNU General Public License.\n'
-              '  ______/____\____').format(__version__, __author__)
+              '  ______/____\______').format(__version__, __author__)
     print(banner)
 
 
@@ -104,20 +104,15 @@ def init():
 
 
 def list_meets(s, tr_id):
-    list_url = 'https://www.trustroots.org/api/offers-by/{}?types=meet'.format(tr_id)
-    meets = s.get(list_url)
+    #list_url = 'https://www.trustroots.org/api/offers-by/{}?types=meet'.format(tr_id)
+    meets = s.get(list_url.format(tr_id))
     meets_all = meets.json()
-    print(meets.status_code)
+    #print(meets.status_code)
     if meets.status_code == 200:
-        meet_ids = [m['_id'] for m in meets_all ]
-        print( meet_ids)
+        meet_ids = [m['_id'] for m in meets_all]
+        #print( meet_ids)
         return  meet_ids
-    else:
-        return []
-    #print("mmmmm",meets_all)
-    #print("JJJJJJJ",meets.json())
-    #print("Found:", meet_ids)
-    #return meet_ids
+    return []
 
 
 def test_auth(tr_id):
@@ -140,7 +135,7 @@ def post_new(s):
     post_data['location'] = latlng
     post_data['validUntil'] = end_time
     #log.warning("post_data: " +  str(post_data))
-    meet = s.post(post_url ,data=json.dumps(post_data), headers=headers)
+    meet = s.post(post_url, data=json.dumps(post_data), headers=headers)
     #log.warning(meet.status_code)
     #log.warning(meet.text)
 
@@ -157,7 +152,8 @@ def main():
     args = parser.parse_args()
     log = logger()
     #log.error(args)
-    config = parse_config()
+    #config = parse_config()
+    parse_config()
 
     if args.action == 'version':
         version()
@@ -167,24 +163,18 @@ def main():
 
     if args.action == 'auth':
         test_auth(tr_id)
-
     elif args.action == 'list':
         list_meets(session, tr_id)
-
     elif args.action == 'clear':
         clear_meets(session, tr_id)
-
     elif args.action == 'post':
         post_new(session)
-    
     elif args.action == 'update':
         clear_meets(session, tr_id)
         post_new(session)
-
     else:
         parser.print_help()
 
 
 if __name__ == "__main__":
     main()
-    
