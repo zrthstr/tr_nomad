@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -a arr=("version" "auth" "list" "post" "list" "clear" "list")
+declare -a arr=("version" "auth" "list" "post" "list" "clear" "list" "update" "list")
 
 bin=trmeet.py
 flags="-v"
