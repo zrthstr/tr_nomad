@@ -13,23 +13,6 @@ import requests
 import geocoder
 
 
-def logger():
-    log = logging.getLogger()
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter('%(name)-12s %(levelname)-8s %(message)s')
-    handler.setFormatter(formatter)
-    log.addHandler(handler)
-    return log
-
-
-def parse_commandline():
-    actions = ['version', 'auth', 'list', 'post', 'clear', 'update']
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--verbose', '-v', action='count')
-    parser.add_argument('action', default='list', choices=actions, help='....')
-    return parser
-
-
 def parse_config():
     global login_url
     global list_url
@@ -75,6 +58,24 @@ def parse_config():
     clear_url = base_url + clear_sufix
 
 
+def logger():
+    log = logging.getLogger()
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter('> %(message)s')
+    handler.setFormatter(formatter)
+    log.addHandler(handler)
+    return log
+
+
+def parse_commandline():
+    actions = ['version', 'auth', 'list', 'post', 'clear', 'update']
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--verbose', '-v', action='count')
+    parser.add_argument('action', default='list', choices=actions, help='....')
+    return parser
+
+
+
 def version():
     banner = ('\n'
               '    ox0x0o0  o0xoo\n'
@@ -103,13 +104,15 @@ def init():
     return tr_id, s
 
 
-def list_meets(s, tr_id):
+def list_meets(s, tr_id, silent=False):
     #list_url = 'https://www.trustroots.org/api/offers-by/{}?types=meet'.format(tr_id)
     meets = s.get(list_url.format(tr_id))
     meets_all = meets.json()
     #print(meets.status_code)
     if meets.status_code == 200:
         meet_ids = [m['_id'] for m in meets_all]
+        if not silent:
+            log.warning("Found {} meets".format(len(meet_ids)))
         #print( meet_ids)
         return  meet_ids
     return []
@@ -121,23 +124,20 @@ def test_auth(tr_id):
 
 
 def clear_meets(s, tr_id):
-    meet_ids = list_meets(s, tr_id)
+    meet_ids = list_meets(s, tr_id, silent=True)
     for mid in meet_ids:
         log.warning("removing: {}".format(mid))
         s.delete(clear_url.format(mid))
 
 
 def post_new(s):
-    #print("POST NEW")
     latlng = get_latlng()
     end_time = (datetime.datetime.now() + datetime.timedelta(hours=hoursonline)).isoformat() + "Z"
     log.warning("Posting new meet: {}@{}".format(latlng, end_time))
     post_data['location'] = latlng
     post_data['validUntil'] = end_time
-    #log.warning("post_data: " +  str(post_data))
     meet = s.post(post_url, data=json.dumps(post_data), headers=headers)
-    #log.warning(meet.status_code)
-    #log.warning(meet.text)
+    log.warning(meet.status_code)
 
 
 def get_latlng():
@@ -151,8 +151,6 @@ def main():
     parser = parse_commandline()
     args = parser.parse_args()
     log = logger()
-    #log.error(args)
-    #config = parse_config()
     parse_config()
 
     if args.action == 'version':
