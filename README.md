@@ -19,27 +19,27 @@ posts your current location to TR
 
 ```
 
-## Usage
+## Config
+```
+cp trmeet.ini_example trmeet.ini
+vim trmeet.ini
+```
 
+## Usage
 ```
 % ./trn.py --help                                                                                                     :(
 usage: trn.py [-h] [--verbose] {version,auth,list,post,clear,update}
 
 positional arguments:
-  version  print version
-  auth     test auth
-  list     list all meets
-  post     post new meet with current location valid for 36h
-  clear    delete all old meets
-  update   delete old meets and post new
+  version      # print version
+  auth         # test auth
+  list         # list all meets
+  post         # post new meet with current location valid for 36h
+  clear        # delete all old meets
+  update       # delete old meets and post new
 
 optional arguments:
   -h, --help            show this help message and exit
   --verbose, -v
 ```
 
-## Config
-```
-cp trmeet.ini_example trmeet.ini
-vim trmeet.ini
-```
