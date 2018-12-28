@@ -1,5 +1,7 @@
 # TR-Nomad
-posts your current location to TR
+* posts your current location to TR
+* current location is defined as in `python geocoder.ip('me')`
+* default TTL is 36h
 
 ## About
 
