@@ -49,6 +49,7 @@ optional arguments:
 ```
 
 ### Todo
+* make help messge nicer
 * add --message to allow config overwrite
 * add --ttl to alow config overwrite
 * add nicer --list output
