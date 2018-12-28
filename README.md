@@ -23,9 +23,10 @@
 
 ## Config & Setup
 ```
-pip3 install -r requirements.txt
-cp trmeet.ini_example trmeet.ini
-vim trmeet.ini
+% pip3 install -r requirements.txt
+
+% cp trmeet.ini_example trmeet.ini
+% vim trmeet.ini
 ```
 
 ## Usage
