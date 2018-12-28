@@ -48,3 +48,9 @@ optional arguments:
   --verbose, -v
 ```
 
+### Todo
+* add --message to allow config overwrite
+* add --ttl to alow config overwrite
+* add nicer --list output
+* add corntab instructions
+* more testing
