@@ -4,7 +4,7 @@ posts your current location to TR
 ## About
 
 ```
-./trn.py version                                                                                                    :(
+% ./trn.py version
 
     ox0x0o0  o0xoo
   o0xox0 o0o o0ox0o0
@@ -26,8 +26,12 @@ posts your current location to TR
 usage: trn.py [-h] [--verbose] {version,auth,list,post,clear,update}
 
 positional arguments:
-  {version,auth,list,post,clear,update}
-                        ....
+  version  print version
+  auth     test auth
+  list     list all meets
+  post     post new meet with current location valid for 36h
+  clear    delete all old meets
+  update   delete old meets and post new
 
 optional arguments:
   -h, --help            show this help message and exit
